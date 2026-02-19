@@ -22,10 +22,10 @@ jobs:
 
       # Restore NuGet dependencies for the API project
       - name: Restore dependencies
-        run: dotnet restore MaintainenceAPI/MaintainenceAPI.csproj
+        run: dotnet restore
 
       - name: Build with dotnet
-        run: dotnet build MaintainenceAPI/MaintainenceAPI.csproj --configuration Release
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
