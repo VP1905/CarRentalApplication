@@ -2,6 +2,7 @@ using MaintenanceAPI.Services;
 using MaintenanceAPI.Middleware;
 using MaintenanceAPI.Middlelware;
 using System.Collections.Concurrent;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,32 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Description = "MY_SECRET_KEY_123",
+        Name = "X-Api-Key",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "ApiKeyScheme"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 builder.Services.AddScoped<IRepairHistoryService, FakeRepairHistoryService>();
 
 var usageCounts = new ConcurrentDictionary<string, int>();
