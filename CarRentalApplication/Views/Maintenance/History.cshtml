@@ -1,0 +1,57 @@
+﻿@model List<CarRentalApplication.Models.RepairHistoryDto>
+
+@{
+    ViewData["Title"] = "Vehicle Repair History";
+}
+
+<div class="container mt-4">
+    <h2>Vehicle Repair History</h2>
+
+    <form method="post" class="mt-3">
+        <div class="form-group">
+            <label for="vehicleId">Vehicle ID</label>
+            <input type="number"
+                   name="vehicleId"
+                   id="vehicleId"
+                   class="form-control"
+                   placeholder="Enter Vehicle ID (e.g., 101)"
+                   required />
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">
+            View History
+        </button>
+    </form>
+
+    <hr />
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info mt-3">
+            <p>No repair history found. Enter a Vehicle ID to view repair records.</p>
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Cost</th>
+                    <th>Performed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var repair in Model)
+                {
+                    <tr>
+                        <td>@repair.RepairDate.ToShortDateString()</td>
+                        <td>@repair.Description</td>
+                        <td>@repair.Cost.ToString("C")</td>
+                        <td>@repair.PerformedBy</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
