@@ -1,4 +1,4 @@
-name: Build and deploy ASP.Net Core app to Azure Web App - carrentalapp-vp26
+name: Build and deploy ASP.Net Core app to Azure Web App - vpcarrental5
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read 
+      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -46,7 +46,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'carrentalapp-vp26'
+          app-name: 'vpcarrental5'
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.__publishingprofilesecretname__ }}
