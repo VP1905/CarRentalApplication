@@ -47,5 +47,11 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'vpcarrental5'
-          package: ./publish
+          package: .
           publish-profile: ${{ secrets.AZURE_VPCAR_API }}
+
+
+
+
+
+
