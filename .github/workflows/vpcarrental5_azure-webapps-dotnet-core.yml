@@ -20,12 +20,13 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Restore
-        run: dotnet restore CarRentalApplication/CarRentalApplication.csproj
+        run: dotnet restore MaintainenceAPI/MaintainenceAPI.csproj
+
       - name: Build with dotnet
-        run: dotnet build CarRentalApplication/CarRentalApplication.csproj --configuration Release --no-restore
+        run: dotnet build MaintainenceAPI/MaintainenceAPI.csproj --configuration Release --no-restore
 
       - name: dotnet publish
-        run: dotnet publish CarRentalApplication/CarRentalApplication.csproj -c Release -o ./publish
+        run: dotnet publish MaintainenceAPI/MaintainenceAPI.csproj -c Release -o ./publish
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
