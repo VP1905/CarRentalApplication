@@ -93,7 +93,7 @@ app.UseMiddleware<ApiKeyMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.MapGet("/", () => "Car Rental API is running on Azure!");
 app.MapControllers();
 
 app.Run();
