@@ -18,20 +18,20 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '8.x'
       - name: Restore
         run: dotnet restore CarRentalApplication/CarRentalApplication.csproj
       - name: Build with dotnet
         run: dotnet build CarRentalApplication/CarRentalApplication.csproj --configuration Release --no-restore
 
       - name: dotnet publish
-        run: dotnet publish CarRentalApplication/CarRentalApplication.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish CarRentalApplication/CarRentalApplication.csproj -c Release -o ./publish
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,6 +50,7 @@ jobs:
           app-name: 'vpcarrental5'
           package: .
           publish-profile: ${{ secrets.AZURE_VPCAR_API }}
+        
 
 
 
