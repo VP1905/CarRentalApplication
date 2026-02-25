@@ -22,13 +22,13 @@ jobs:
 
       # Restore NuGet dependencies for the API project
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore CarRentalApplication/CarRentalApplication.csproj
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build CarRentalApplication/CarRentalApplication.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish CarRentalApplication/CarRentalApplication.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
