@@ -1,3 +1,4 @@
+using CarRental.Exception.Middleware;
 using InventoryAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,8 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<ApiGatewayAccessMiddleware>();
 
 app.UseHttpsRedirection();
 

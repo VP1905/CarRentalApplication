@@ -11,17 +11,22 @@ namespace MaintenanceAPI.Controllers
     {
         private readonly IRepairHistoryService _service;
         private readonly ConcurrentDictionary<string, int> _usageCounts;
-        public MaintenanceController(IRepairHistoryService service, ConcurrentDictionary<string, int> usageCounts)
+
+        public MaintenanceController(
+            IRepairHistoryService service,
+            ConcurrentDictionary<string, int> usageCounts)
         {
             _service = service;
             _usageCounts = usageCounts;
         }
+
         [HttpGet("vehicles/{vehicleId}/repairs")]
         public IActionResult GetRepairHistory(int vehicleId)
         {
             var history = _service.GetByVehicleId(vehicleId);
             return Ok(history);
         }
+
         [HttpPost("repairs")]
         public IActionResult AddRepair([FromBody] RepairHistoryDto repair)
         {
@@ -55,32 +60,28 @@ namespace MaintenanceAPI.Controllers
             return CreatedAtAction(
                 nameof(GetRepairHistory),
                 new { vehicleId = repair.VehicleId },
-                repair
-            );
+                repair);
         }
 
         [HttpGet("crash")]
         public IActionResult Crash()
         {
-            int x = 0;
-            int y = 5 / x;
-            return Ok();
+            throw new System.Exception("Test exception for global handler.");
         }
 
         [HttpGet("usage")]
         public IActionResult Usage()
         {
-            var key = Request.Headers["X-Api-Key"].ToString();
+            var gatewayHeader = Request.Headers["X-Internal-Gateway"].ToString();
 
             var count = _usageCounts.AddOrUpdate(
-                key,
+                gatewayHeader,
                 1,
-                (k, oldValue) => oldValue + 1
-            );
+                (_, oldValue) => oldValue + 1);
 
             return Ok(new
             {
-                clientId = key,
+                source = "API Gateway",
                 callCount = count
             });
         }

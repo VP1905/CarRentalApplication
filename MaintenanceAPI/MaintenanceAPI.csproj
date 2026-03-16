@@ -16,4 +16,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CarRental.Exception\CarRental.Exception.csproj" />
+  </ItemGroup>
+
 </Project>
