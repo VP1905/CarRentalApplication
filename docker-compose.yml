@@ -1,6 +1,63 @@
+version: '3.8'
+
 services:
   apigateway:
-    image: ${DOCKER_REGISTRY-}apigateway
     build:
       context: .
       dockerfile: ApiGateway/Dockerfile
+    container_name: apigateway
+    ports:
+      - "7152:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - customerapi
+      - inventoryapi
+      - maintenanceapi
+
+  carrentalapplication:
+    build:
+      context: .
+      dockerfile: CarRentalApplication/Dockerfile
+    container_name: carrentalapplication
+    ports:
+      - "7000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - apigateway
+
+  customerapi:
+    build:
+      context: .
+      dockerfile: CustomerAPI/Dockerfile
+    container_name: customerapi
+    ports:
+      - "7199:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+
+  inventoryapi:
+    build:
+      context: .
+      dockerfile: InventoryAPI/Dockerfile
+    container_name: inventoryapi
+    ports:
+      - "7268:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+
+  maintenanceapi:
+    build:
+      context: .
+      dockerfile: MaintenanceAPI/Dockerfile
+    container_name: maintenanceapi
+    ports:
+      - "7208:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080

@@ -21,6 +21,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRental.Exception", "CarR
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleInventory.Application_VP", "..\VehicleInventory.Application_VP\VehicleInventory.Application_VP.csproj", "{12740753-429A-4C78-92E2-DBA78C2F8790}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleInventory.Domain_VP", "..\VehicleInventory.Domain_VP\VehicleInventory.Domain_VP.csproj", "{756B203A-B400-4BCA-8B41-E94D70DE76B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleInventory.Infrastructure_VP", "..\VehicleInventory.Infrastructure_VP\VehicleInventory.Infrastructure_VP.csproj", "{8E5A7229-D8F7-49CF-8FA3-E94A631D4A1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleInventory.WebAPI_VP", "..\VehicleInventory.WebAPI_VP\VehicleInventory.WebAPI_VP.csproj", "{2E5B0DC0-6E86-4CAD-AA42-8C15A1BD013D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +63,22 @@ Global
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12740753-429A-4C78-92E2-DBA78C2F8790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12740753-429A-4C78-92E2-DBA78C2F8790}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12740753-429A-4C78-92E2-DBA78C2F8790}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12740753-429A-4C78-92E2-DBA78C2F8790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756B203A-B400-4BCA-8B41-E94D70DE76B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756B203A-B400-4BCA-8B41-E94D70DE76B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756B203A-B400-4BCA-8B41-E94D70DE76B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756B203A-B400-4BCA-8B41-E94D70DE76B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E5A7229-D8F7-49CF-8FA3-E94A631D4A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E5A7229-D8F7-49CF-8FA3-E94A631D4A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E5A7229-D8F7-49CF-8FA3-E94A631D4A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5A7229-D8F7-49CF-8FA3-E94A631D4A1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E5B0DC0-6E86-4CAD-AA42-8C15A1BD013D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E5B0DC0-6E86-4CAD-AA42-8C15A1BD013D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E5B0DC0-6E86-4CAD-AA42-8C15A1BD013D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E5B0DC0-6E86-4CAD-AA42-8C15A1BD013D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +90,8 @@ Global
 		{5F308C4A-648F-4538-A553-6A989F8F6122} = {2E277118-4F26-45E7-8D30-31B6E038F790}
 		{92DFA0A7-685C-4EC7-82DE-24DE0B3C3F93} = {2E277118-4F26-45E7-8D30-31B6E038F790}
 		{3EEEDCF6-301E-4736-A584-E1F52577178F} = {2E277118-4F26-45E7-8D30-31B6E038F790}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54DB6BDF-A9D7-4DC5-B948-7A63152AAFDD}
 	EndGlobalSection
 EndGlobal
