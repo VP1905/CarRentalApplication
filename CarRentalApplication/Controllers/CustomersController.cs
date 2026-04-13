@@ -1,24 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CarRentalApplication.Data;
+﻿using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using CarRentalApplication.Models;
 
 namespace CarRentalApplication.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly JsonSerializerOptions _jsonOptions;
 
-        public CustomersController(AppDbContext context)
+        public CustomersController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
+            _jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+        }
+
+        private HttpClient CreateClient()
+        {
+            return _httpClientFactory.CreateClient("ApiGateway");
         }
 
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customer.ToListAsync());
+            var client = CreateClient();
+            var response = await client.GetAsync("/gateway/customers");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to load customers. Status: {response.StatusCode}");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var customers = JsonSerializer.Deserialize<List<Customer>>(json, _jsonOptions) ?? new List<Customer>();
+
+            return View(customers);
         }
 
         // GET: Customers/Details/5
@@ -29,8 +49,22 @@ namespace CarRentalApplication.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+            var client = CreateClient();
+            var response = await client.GetAsync($"/gateway/customers/{id}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to load customer details. Status: {response.StatusCode}");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var customer = JsonSerializer.Deserialize<Customer>(json, _jsonOptions);
+
             if (customer == null)
             {
                 return NotFound();
@@ -46,19 +80,28 @@ namespace CarRentalApplication.Controllers
         }
 
         // POST: Customers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Phone,Email")] Customer customer)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(customer);
             }
-            return View(customer);
+
+            var client = CreateClient();
+
+            var json = JsonSerializer.Serialize(customer);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("/gateway/customers", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to create customer. Status: {response.StatusCode}");
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Customers/Edit/5
@@ -69,17 +112,31 @@ namespace CarRentalApplication.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer.FindAsync(id);
+            var client = CreateClient();
+            var response = await client.GetAsync($"/gateway/customers/{id}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to load customer for edit. Status: {response.StatusCode}");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var customer = JsonSerializer.Deserialize<Customer>(json, _jsonOptions);
+
             if (customer == null)
             {
                 return NotFound();
             }
+
             return View(customer);
         }
 
         // POST: Customers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Phone,Email")] Customer customer)
@@ -89,27 +146,29 @@ namespace CarRentalApplication.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerExists(customer.CustomerId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(customer);
             }
-            return View(customer);
+
+            var client = CreateClient();
+
+            var json = JsonSerializer.Serialize(customer);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/gateway/customers/{id}", content);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to update customer. Status: {response.StatusCode}");
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Customers/Delete/5
@@ -120,8 +179,22 @@ namespace CarRentalApplication.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+            var client = CreateClient();
+            var response = await client.GetAsync($"/gateway/customers/{id}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to load customer for delete. Status: {response.StatusCode}");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var customer = JsonSerializer.Deserialize<Customer>(json, _jsonOptions);
+
             if (customer == null)
             {
                 return NotFound();
@@ -135,19 +208,21 @@ namespace CarRentalApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customer.FindAsync(id);
-            if (customer != null)
+            var client = CreateClient();
+
+            var response = await client.DeleteAsync($"/gateway/customers/{id}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                _context.Customer.Remove(customer);
+                return NotFound();
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to delete customer. Status: {response.StatusCode}");
+            }
 
-        private bool CustomerExists(int id)
-        {
-            return _context.Customer.Any(e => e.CustomerId == id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

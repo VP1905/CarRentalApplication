@@ -17,11 +17,38 @@ namespace CustomerAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customers>>> GetCustomer()
+        public IActionResult GetCustomer()
         {
-            return await _context.Customer.ToListAsync();
+            var customers = new[]
+            {
+        new
+        {
+            Id = 1,
+            FirstName = "John",
+            LastName = "Smith",
+            Email = "john.smith@example.com",
+            PhoneNumber = "123-456-7890"
+        },
+        new
+        {
+            Id = 2,
+            FirstName = "Emma",
+            LastName = "Brown",
+            Email = "emma.brown@example.com",
+            PhoneNumber = "987-654-3210"
+        },
+        new
+        {
+            Id = 3,
+            FirstName = "Liam",
+            LastName = "Wilson",
+            Email = "liam.wilson@example.com",
+            PhoneNumber = "555-222-1111"
         }
+    };
 
+            return Ok(customers);
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<Customers>> GetCustomer(int id)
         {
