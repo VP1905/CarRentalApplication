@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace VehicleInventory.Domain_VP.SeedWork
 {
-    internal class IAggregateRoot
+    // In DDD, an Aggregate Root is the main entry point of a cluster of related objects
+    public interface IAggregateRoot
     {
     }
 }

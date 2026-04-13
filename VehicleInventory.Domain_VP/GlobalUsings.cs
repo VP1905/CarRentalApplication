@@ -1,6 +1,6 @@
 ﻿namespace VehicleInventory.Domain_VP
 {
-    public class Class1
+    public class GlobalUsings
     {
 
     }
