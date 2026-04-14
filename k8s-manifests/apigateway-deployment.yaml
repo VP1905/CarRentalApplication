@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert --out k8s-manifests
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: apigateway
+  name: apigateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: apigateway
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert --out k8s-manifests
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: apigateway
+    spec:
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:8080
+          image: carrental-apigateway:latest
+          imagePullPolicy: Never
+          name: apigateway
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      restartPolicy: Always
